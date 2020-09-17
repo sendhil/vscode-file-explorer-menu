@@ -58,12 +58,20 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(menuDisposable);
 }
 
-export async function addChildNode(context: vscode.ExtensionContext) {
-	console.log("Hi addChildNode");
+async function getCurrentlySelectedFile() : Promise<string> {
+	let currentText = await vscode.env.clipboard.readText();
+	await vscode.commands.executeCommand('copyFilePath');
+	let pathOfActiveFile = await vscode.env.clipboard.readText();
+	await vscode.env.clipboard.writeText(currentText);
+	return pathOfActiveFile;
+}
+
+export async function addChildNode(context: any) {
+	console.log("Hi addChildNode :", await getCurrentlySelectedFile());
 }
 
 export async function deleteChildNode(context: vscode.ExtensionContext) {
-	console.log("Hi deleteChildNode");
+	console.log("Hi deleteChildNode: ", await getCurrentlySelectedFile());
 }
 
 export async function moveChildNode(context: vscode.ExtensionContext) {
