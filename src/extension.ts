@@ -1,7 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-
+import * as path from 'path';
 
 export async function showQuickPick() {
 	let i = 0;
@@ -67,11 +67,35 @@ async function getCurrentlySelectedFile() : Promise<string> {
 }
 
 export async function addChildNode(context: any) {
-	console.log("Hi addChildNode :", await getCurrentlySelectedFile());
+	const baseName = await vscode.window.showInputBox({
+		value: '',
+		placeHolder: 'Enter filename',
+	});
+
+	const workingDirectory = path.dirname(await getCurrentlySelectedFile());
+	const fullFilePath = `${workingDirectory}/${baseName}`;
+	vscode.workspace.fs.writeFile(vscode.Uri.file(fullFilePath), new Uint8Array());
+	vscode.window.showInformationMessage(`Created : ${fullFilePath}`);
 }
 
 export async function deleteChildNode(context: vscode.ExtensionContext) {
-	console.log("Hi deleteChildNode: ", await getCurrentlySelectedFile());
+	const currentlySelectedFile = await getCurrentlySelectedFile();
+
+	const confirmation = await vscode.window.showInputBox({
+		prompt: `Are you sure you wish to delete : ${currentlySelectedFile} (yN): ?`,
+		validateInput: text => {
+			const lowerCaseText = text.toLocaleLowerCase();
+			return ['y','n','yes', 'no'].indexOf(lowerCaseText) === -1 ? 'y or n' : null;
+		}
+	});
+
+	if (confirmation?.toLowerCase().indexOf("y") === -1) {
+		return;
+	}
+
+	const dirName = path.dirname(currentlySelectedFile);
+	await vscode.workspace.fs.delete(vscode.Uri.file(currentlySelectedFile));
+	vscode.window.showInformationMessage(`Deleted :${currentlySelectedFile} located in : ${dirName}`);
 }
 
 export async function moveChildNode(context: vscode.ExtensionContext) {
