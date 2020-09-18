@@ -3,27 +3,12 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 
-export async function showQuickPick() {
-	let i = 0;
-	const result = await vscode.window.showQuickPick(['eins', 'zwei', 'drei'], {
-		placeHolder: 'eins, zwei or drei',
-		onDidSelectItem: item => vscode.window.showInformationMessage(`Focus ${++i}: ${item}`)
-	});
-	vscode.window.showInformationMessage(`Got: ${result}`);
-}
-
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-
-	const options: { [key: string]: (context: vscode.ExtensionContext) => Promise<void> } = {
-		showQuickPick,
-	};
-	console.log(options);
-
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "vscode-file-explorer-enhancements" is now active!');
+	console.log('"vscode-file-explorer-enhancements" is now active!');
 
 	let menuDisposable = vscode.commands.registerCommand('vscode-file-explorer-enhancements.openFileEnhancementsMenu', () => {
 		const items:{ [key:string] : {description: string, callback: (context: vscode.ExtensionContext) => Promise<void>}} = {
