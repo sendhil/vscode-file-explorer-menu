@@ -102,7 +102,7 @@ export async function moveChildNode(context: vscode.ExtensionContext) {
 }
 
 export async function revealCurrentNodeInFileExplorer(context: vscode.ExtensionContext) {
-	console.log("Hi revealCurrentNodeInFileExplorer");
+	vscode.commands.executeCommand("revealFileInOS");
 }
 
 export async function openCurrentNodeWithEditor(context: vscode.ExtensionContext) {
