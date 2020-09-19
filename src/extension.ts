@@ -1,13 +1,6 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import * as path from 'path';
-
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
 	console.log('"vscode-file-explorer-enhancements" is now active!');
 
 	let menuDisposable = vscode.commands.registerCommand('vscode-file-explorer-enhancements.openFileEnhancementsMenu', () => {
@@ -43,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(menuDisposable);
 }
 
-async function getCurrentlySelectedFile() : Promise<string> {
+async function getCurrentlySelectedFilePath() : Promise<string> {
 	let currentText = await vscode.env.clipboard.readText();
 	await vscode.commands.executeCommand('copyFilePath');
 	let pathOfActiveFile = await vscode.env.clipboard.readText();
@@ -57,14 +50,14 @@ export async function addChildNode(context: any) {
 		placeHolder: 'Enter filename',
 	});
 
-	const workingDirectory = path.dirname(await getCurrentlySelectedFile());
+	const workingDirectory = path.dirname(await getCurrentlySelectedFilePath());
 	const fullFilePath = `${workingDirectory}/${baseName}`;
 	vscode.workspace.fs.writeFile(vscode.Uri.file(fullFilePath), new Uint8Array());
 	vscode.window.showInformationMessage(`Created : ${fullFilePath}`);
 }
 
 export async function deleteChildNode(context: vscode.ExtensionContext) {
-	const currentlySelectedFile = await getCurrentlySelectedFile();
+	const currentlySelectedFile = await getCurrentlySelectedFilePath();
 
 	const confirmation = await vscode.window.showInputBox({
 		prompt: `Are you sure you wish to delete : ${currentlySelectedFile} (yN): ?`,
@@ -84,7 +77,28 @@ export async function deleteChildNode(context: vscode.ExtensionContext) {
 }
 
 export async function moveChildNode(context: vscode.ExtensionContext) {
-	console.log("Hi moveChildNode");
+	const currentFilePath = await getCurrentlySelectedFilePath();
+	const newFilePath = await vscode.window.showInputBox({
+		prompt: "Enter new path",
+		value: currentFilePath,
+		placeHolder: 'Enter new path',
+	});
+
+	if (!newFilePath) {
+		return;
+	}
+
+	try {
+		const fileStats = await vscode.workspace.fs.stat(vscode.Uri.file(newFilePath));
+		if (fileStats) {
+			vscode.window.showErrorMessage("File already exists");
+			return;
+		}
+	} catch (_) {
+	}
+
+	vscode.workspace.fs.rename(vscode.Uri.file(currentFilePath), vscode.Uri.file(newFilePath));
+	vscode.window.showInformationMessage(`Moved ${currentFilePath} to ${newFilePath}`);
 }
 
 export async function revealCurrentNodeInFileExplorer(context: vscode.ExtensionContext) {
