@@ -1,23 +1,25 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
+import { exec } from 'child_process';
+
 export function activate(context: vscode.ExtensionContext) {
 	console.log('"vscode-file-explorer-enhancements" is now active!');
 
 	let menuDisposable = vscode.commands.registerCommand('vscode-file-explorer-enhancements.openFileEnhancementsMenu', () => {
-		const items:{ [key:string] : {description: string, callback: (context: vscode.ExtensionContext) => Promise<void>}} = {
-			'addChildNode': {description: 'Add a childnode', callback: addChildNode},
-			'moveCurrentNode': {description: 'Move current node', callback: moveChildNode},
-			'deleteCurrentNode': {description: 'Delete current node', callback: deleteChildNode},
-			'revealCurrentNode': {description: 'Reveal Current Node in File Manager', callback: revealCurrentNodeInFileExplorer},
-			'openCurrentNodeWithEditor': {description: 'Reveal Current Node in File Manager', callback: openCurrentNodeWithEditor},
-			'copyCurrentNode': {description: 'Reveal Current Node in File Manager', callback: copyCurrentNode},
-			'copyPathToClipboard': {description: 'Reveal Current Node in File Manager', callback: copyPathToClipboard},
-			'listCurrentNode': {description: 'Reveal Current Node in File Manager', callback: listCurrentNode},
+		const items: { [key: string]: { description: string, callback: (context: vscode.ExtensionContext) => Promise<void> } } = {
+			'addChildNode': { description: 'Add a childnode', callback: addChildNode },
+			'moveCurrentNode': { description: 'Move current node', callback: moveChildNode },
+			'deleteCurrentNode': { description: 'Delete current node', callback: deleteChildNode },
+			'revealCurrentNode': { description: 'Reveal Current Node in File Manager', callback: revealCurrentNodeInFileExplorer },
+			'openCurrentNodeWithEditor': { description: 'Reveal Current Node in File Manager', callback: openCurrentNodeWithEditor },
+			'copyCurrentNode': { description: 'Reveal Current Node in File Manager', callback: copyCurrentNode },
+			'copyPathToClipboard': { description: 'Reveal Current Node in File Manager', callback: copyPathToClipboard },
+			'listCurrentNode': { description: 'Reveal Current Node in File Manager', callback: listCurrentNode },
 		};
 
 		let quickPick = vscode.window.createQuickPick();
-		let currentlySelectedItem:vscode.QuickPickItem | null = null;
-		quickPick.items = Object.keys(items).map(label => ({label: label, description: items[label].description}));
+		let currentlySelectedItem: vscode.QuickPickItem | null = null;
+		quickPick.items = Object.keys(items).map(label => ({ label: label, description: items[label].description }));
 		quickPick.onDidChangeSelection(item => {
 			if (item[0]) {
 				currentlySelectedItem = item[0];
@@ -36,7 +38,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(menuDisposable);
 }
 
-async function getCurrentlySelectedFilePath() : Promise<string> {
+async function getCurrentlySelectedFilePath(): Promise<string> {
 	let currentText = await vscode.env.clipboard.readText();
 	await vscode.commands.executeCommand('copyFilePath');
 	let pathOfActiveFile = await vscode.env.clipboard.readText();
@@ -63,7 +65,7 @@ export async function deleteChildNode(context: vscode.ExtensionContext) {
 		prompt: `Are you sure you wish to delete : ${currentlySelectedFile} (yN): ?`,
 		validateInput: text => {
 			const lowerCaseText = text.toLocaleLowerCase();
-			return ['y','n','yes', 'no'].indexOf(lowerCaseText) === -1 ? 'y or n' : null;
+			return ['y', 'n', 'yes', 'no'].indexOf(lowerCaseText) === -1 ? 'y or n' : null;
 		}
 	});
 
@@ -139,8 +141,17 @@ export async function copyPathToClipboard(context: vscode.ExtensionContext) {
 }
 
 export async function listCurrentNode(context: vscode.ExtensionContext) {
-	console.log("Hi listCurrentNode");
+	// TODO: Add option to display in terminal
+	let currentFilePath = await getCurrentlySelectedFilePath();
+
+	const {stdout, stderr} = await exec(`ls -la ${currentFilePath}`);
+	stdout?.on("data", (output) => {
+		vscode.window.showInformationMessage(output);
+	});
+	stderr?.on("data", (output) => {
+		vscode.window.showErrorMessage(output);
+	});
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }
