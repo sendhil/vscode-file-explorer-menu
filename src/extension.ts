@@ -110,11 +110,32 @@ export async function openCurrentNodeWithEditor(context: vscode.ExtensionContext
 }
 
 export async function copyCurrentNode(context: vscode.ExtensionContext) {
-	console.log("Hi copyCurrentNode");
+	const currentFilePath = await getCurrentlySelectedFilePath();
+	const fileCopyPath = await vscode.window.showInputBox({
+		prompt: "Enter the new path to copy the node to",
+		value: currentFilePath,
+		placeHolder: 'Enter the new path to copy the node to',
+	});
+
+	if (!fileCopyPath) {
+		return;
+	}
+
+	try {
+		const fileStats = await vscode.workspace.fs.stat(vscode.Uri.file(fileCopyPath));
+		if (fileStats) {
+			vscode.window.showErrorMessage("File already exists");
+			return;
+		}
+	} catch (_) {
+	}
+
+	vscode.workspace.fs.copy(vscode.Uri.file(currentFilePath), vscode.Uri.file(fileCopyPath));
+	vscode.window.showInformationMessage(`Copied ${currentFilePath} to ${fileCopyPath}`);
 }
 
 export async function copyPathToClipboard(context: vscode.ExtensionContext) {
-	console.log("Hi copyPathToClipboard");
+	await vscode.commands.executeCommand('copyFilePath');
 }
 
 export async function listCurrentNode(context: vscode.ExtensionContext) {
