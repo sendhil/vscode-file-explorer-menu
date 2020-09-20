@@ -3,23 +3,23 @@ import * as path from 'path';
 import { exec } from 'child_process';
 
 export function activate(context: vscode.ExtensionContext) {
-	console.log('"vscode-file-explorer-enhancements" is now active!');
-
 	let menuDisposable = vscode.commands.registerCommand('vscode-file-explorer-enhancements.openFileEnhancementsMenu', () => {
-		const items: { [key: string]: { description: string, callback: (context: vscode.ExtensionContext) => Promise<void> } } = {
-			'addChildNode': { description: 'Add a childnode', callback: addChildNode },
-			'moveCurrentNode': { description: 'Move current node', callback: moveChildNode },
-			'deleteCurrentNode': { description: 'Delete current node', callback: deleteChildNode },
-			'revealCurrentNode': { description: 'Reveal Current Node in File Manager', callback: revealCurrentNodeInFileExplorer },
-			'openCurrentNodeWithEditor': { description: 'Reveal Current Node in File Manager', callback: openCurrentNodeWithEditor },
-			'copyCurrentNode': { description: 'Reveal Current Node in File Manager', callback: copyCurrentNode },
-			'copyPathToClipboard': { description: 'Reveal Current Node in File Manager', callback: copyPathToClipboard },
-			'listCurrentNode': { description: 'Reveal Current Node in File Manager', callback: listCurrentNode },
-		};
+
+		const items:Array<{ description: string, callback: (context: vscode.ExtensionContext) => Promise<void> }> = [
+			{ description: 'Add a Childnode', callback: addChildNode },
+			{ description: 'Move Current Node', callback: moveChildNode },
+			{ description: 'Delete Current Node', callback: deleteChildNode },
+			{ description: 'Reveal Current Node In File Manager', callback: revealCurrentNodeInFileExplorer },
+			{ description: 'Open Current Node With Editor', callback: openCurrentNodeWithEditor },
+			{ description: 'Copy Current Node', callback: copyCurrentNode },
+			{ description: 'Copy Path To Clipboard', callback: copyPathToClipboard },
+			{ description: 'List Current Node', callback: listCurrentNode },
+		];
+
 
 		let quickPick = vscode.window.createQuickPick();
 		let currentlySelectedItem: vscode.QuickPickItem | null = null;
-		quickPick.items = Object.keys(items).map(label => ({ label: label, description: items[label].description }));
+		quickPick.items = items.map(item => ({ label: item.description}));
 		quickPick.onDidChangeSelection(item => {
 			if (item[0]) {
 				currentlySelectedItem = item[0];
@@ -27,9 +27,13 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 		quickPick.onDidAccept(() => {
 			if (currentlySelectedItem) {
-				items[currentlySelectedItem.label].callback(context);
+				for (let i=0; i < items.length; i++) {
+					if (items[i].description === currentlySelectedItem.label) {
+						items[i].callback(context);
+					}
+				}
 			}
-			quickPick.hide(); // TODO: Figure out if this creates a strong reference cycle
+			quickPick.dispose();
 		});
 		quickPick.onDidHide(() => quickPick.dispose());
 		quickPick.show();
