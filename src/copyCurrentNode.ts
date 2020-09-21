@@ -17,12 +17,12 @@ export async function copyCurrentNode(context: vscode.ExtensionContext) {
 	try {
 		const fileStats = await vscode.workspace.fs.stat(vscode.Uri.file(fileCopyPath));
 		if (fileStats) {
-			vscode.window.showErrorMessage("File already exists");
+			await vscode.window.showErrorMessage("File already exists");
 			return;
 		}
 	} catch (_) {
 	}
 
-	vscode.workspace.fs.copy(vscode.Uri.file(currentFilePath), vscode.Uri.file(fileCopyPath));
-	vscode.window.showInformationMessage(`Copied ${currentFilePath} to ${fileCopyPath}`);
+	await vscode.workspace.fs.copy(vscode.Uri.file(currentFilePath), vscode.Uri.file(fileCopyPath));
+	await vscode.window.showInformationMessage(`Copied ${currentFilePath} to ${fileCopyPath}`);
 }
