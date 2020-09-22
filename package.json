@@ -1,7 +1,7 @@
 {
-  "name": "vscode-file-explorer-enhancements",
-	"displayName": "vscode-file-explorer-enhancements",
-	"description": "Enhancement to the VSCode File Explorer",
+  "name": "vscode-file-explorer-menu",
+	"displayName": "VSCode File Explorer Menu",
+	"description": "A NERDTree like menu for the VSCode File Explorer.",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.49.0"
@@ -10,14 +10,14 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onCommand:vscode-file-explorer-enhancements.openFileEnhancementsMenu"
+        "onCommand:vscodeFileExplorerMenu.openFileExplorerMenu"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "vscode-file-explorer-enhancements.openFileEnhancementsMenu",
-				"title": "File Enhancements Menu"
+				"command": "vscodeFileExplorerMenu.openFileExplorerMenu",
+				"title": "File Explorer Menu: Open Menu"
 			}
 		]
 	},

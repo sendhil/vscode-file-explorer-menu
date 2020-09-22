@@ -10,7 +10,7 @@ import { listCurrentNode } from './listCurrentNode';
 import { openCurrentNodeWithEditor } from './openCurrentNodeWithEditor';
 
 export function activate(context: vscode.ExtensionContext) {
-	let menuDisposable = vscode.commands.registerCommand('vscode-file-explorer-enhancements.openFileEnhancementsMenu', () => {
+	let menuDisposable = vscode.commands.registerCommand('vscodeFileExplorerMenu.openFileExplorerMenu', () => {
 
 		const items:Array<{ description: string, callback: (context: vscode.ExtensionContext) => Promise<void> }> = [
 			{ description: 'Add a Childnode', callback: addChildNode },
