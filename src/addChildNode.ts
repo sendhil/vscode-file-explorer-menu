@@ -41,7 +41,11 @@ export async function addChildNode() {
 		// Create file
 		const filePath = vscode.Uri.file(newFilePath);
 		await vscode.workspace.fs.writeFile(filePath, new Uint8Array());
-		await vscode.workspace.openTextDocument(filePath);
+		try {
+			await vscode.window.showTextDocument(filePath);
+		} catch (err) {
+			console.error(err);
+		}
 	}
 
 	await vscode.window.showInformationMessage(`Created : ${newFilePath}`);
