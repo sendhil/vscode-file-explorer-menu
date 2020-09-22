@@ -21,10 +21,13 @@ export async function deleteChildNode(context: vscode.ExtensionContext) {
 		// TODO: Add setting to skip this
 		if (await confirmDeletion(`Are you sure you wish to delete folder : ${currentlySelectedFile}?`)) {
 			await vscode.workspace.fs.delete(vscode.Uri.file(currentlySelectedFile), {recursive: true});
+			await vscode.commands.executeCommand("workbench.files.action.focusFilesExplorer");
 			await vscode.window.showInformationMessage(`Deleted folder :${currentlySelectedFile}.`);
 		}
 	} else {
 		await vscode.workspace.fs.delete(vscode.Uri.file(currentlySelectedFile));
+		// TODO: Check if focus was on the file explorer
+		await vscode.commands.executeCommand("workbench.files.action.focusFilesExplorer");
 		await vscode.window.showInformationMessage(`Deleted file :${currentlySelectedFile}.`);
 	}
 
