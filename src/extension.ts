@@ -7,6 +7,7 @@ import { revealCurrentNodeInFileExplorer } from './revealCurrentNodeInFileExplor
 import { copyCurrentNode } from './copyCurrentNode';
 import { copyPathToClipboard } from './copyPathToClipboard';
 import { listCurrentNode } from './listCurrentNode';
+import { openCurrentNodeWithEditor } from './openCurrentNodeWithEditor';
 
 export function activate(context: vscode.ExtensionContext) {
 	let menuDisposable = vscode.commands.registerCommand('vscode-file-explorer-enhancements.openFileEnhancementsMenu', () => {
@@ -45,11 +46,6 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(menuDisposable);
-}
-
-export async function openCurrentNodeWithEditor(context: vscode.ExtensionContext) {
-	// TODO: Figure out whether to keep this or not
-	console.log("Hi openCurrentNodeWithEditor");
 }
 
 // this method is called when your extension is deactivated
