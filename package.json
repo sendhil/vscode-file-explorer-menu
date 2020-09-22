@@ -2,6 +2,9 @@
   "name": "vscode-file-explorer-menu",
 	"displayName": "VSCode File Explorer Menu",
 	"description": "A NERDTree like menu for the VSCode File Explorer.",
+	"repository": {
+		"url": "https://github.com/sendhil/vscode-file-explorer-menu"
+	},
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.49.0"
@@ -13,6 +16,8 @@
         "onCommand:vscodeFileExplorerMenu.openFileExplorerMenu"
 	],
 	"main": "./out/extension.js",
+	"publisher": "sendhil",
+	"license": "MIT",
 	"contributes": {
 		"commands": [
 			{
