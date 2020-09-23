@@ -4,7 +4,7 @@ This extension attempts to mimic the menu from the Vim [NERDTree](https://github
 
 ![quick demo](images/vscode-file-explorer-menu-demo.gif)
 
-The extension includes one command `vscodeFileExplorerMenu.openFileExplorerMenu` which can be executed through the normal command menu, but I recommend you bind it to a key scoped to file explorer menu for quick access (e.g. I bind it to `m` and use `explorerViewletVisible && filesExplorerFocus && !inputFocus` for my when clause).
+The extension includes one command `vscodeFileExplorerMenu.openFileExplorerMenu` which can be executed through the normal command menu, but for convenience(and to mimic NERDTree) it's bound to the `m` key with the `explorerViewletVisible && filesExplorerFocus && !inputFocus` when clause.
 
 ## Features
 

@@ -25,6 +25,13 @@
 				"title": "File Explorer Menu: Open Menu"
 			}
 		],
+		"keybindings" : [
+			{
+				"command": "vscodeFileExplorerMenu.openFileExplorerMenu",
+				"key": "m",
+				"when": "explorerViewletVisible && filesExplorerFocus && !inputFocus"
+			}
+		],
 		"configuration": {
 			"title": "File Explorer Menu",
 			"properties": {
