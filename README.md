@@ -1,6 +1,6 @@
 # VSCode File Explorer Menu
 
-This extension attempts to mimic the menu feature from the Vim [NERDTree](https://github.com/preservim/nerdtree) plugin.
+This extension attempts to mimic the menu from the Vim [NERDTree](https://github.com/preservim/nerdtree) plugin.
 
 ![quick demo](images/vscode-file-explorer-menu-demo.gif)
 
