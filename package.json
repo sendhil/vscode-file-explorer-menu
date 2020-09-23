@@ -24,7 +24,22 @@
 				"command": "vscodeFileExplorerMenu.openFileExplorerMenu",
 				"title": "File Explorer Menu: Open Menu"
 			}
-		]
+		],
+		"configuration": {
+			"title": "File Explorer Menu",
+			"properties": {
+				"fileExplorerMenu.confirmFolderDeletion" : {
+					"type": "boolean",
+					"default": 	true,
+					"description": "Ask for an second confirmation when deleting a folder."
+				},
+				"fileExplorerMenu.displayListNodeInTerminal" : {
+					"type": "boolean",
+					"default": 	false,
+					"description": "Display output of List Current Node in the Terminal."
+				}
+			}
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "yarn run compile",

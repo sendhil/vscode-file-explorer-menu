@@ -29,3 +29,7 @@ export function doesPathBelongToWorkspace(filePath:string): Boolean {
 
 	return false;
 }
+
+export function getConfig(): vscode.WorkspaceConfiguration {
+	return vscode.workspace.getConfiguration("fileExplorerMenu");
+}

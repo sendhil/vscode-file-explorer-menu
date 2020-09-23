@@ -1,10 +1,9 @@
 import * as vscode from 'vscode';
 import { exec } from 'child_process';
-import { getCurrentlySelectedFilePath } from './utility';
+import { getConfig, getCurrentlySelectedFilePath } from './utility';
 
 
 export async function listCurrentNode(context: vscode.ExtensionContext) {
-	// TODO: Add option to display in terminal
 	let currentFilePath = await getCurrentlySelectedFilePath();
 
 	try {
@@ -14,11 +13,22 @@ export async function listCurrentNode(context: vscode.ExtensionContext) {
 		return;
 	}
 
-	const { stdout, stderr } = await exec(`ls -la ${currentFilePath}`);
-	stdout?.on("data", (output) => {
-		vscode.window.showInformationMessage(output);
-	});
-	stderr?.on("data", (output) => {
-		vscode.window.showErrorMessage(output);
-	});
+	const command = `ls -la ${currentFilePath}`;
+
+	let config = getConfig();
+	if (config.get<Boolean>("displayListNodeInTerminal")) {
+		let terminal = vscode.window.createTerminal({ 
+			hideFromUser: true
+		});
+		terminal.sendText(command);
+		terminal.show();
+	} else {
+		const { stdout, stderr } = exec(command);
+		stdout?.on("data", (output) => {
+			vscode.window.showInformationMessage(output);
+		});
+		stderr?.on("data", (output) => {
+			vscode.window.showErrorMessage(output);
+		});
+	}
 }

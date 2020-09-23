@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { getCurrentlySelectedFilePath } from './utility';
+import { getConfig, getCurrentlySelectedFilePath } from './utility';
 
 export async function deleteChildNode(context: vscode.ExtensionContext) {
 	const currentlySelectedFile = await getCurrentlySelectedFilePath();
@@ -18,14 +18,17 @@ export async function deleteChildNode(context: vscode.ExtensionContext) {
 	}
 
 	if (isDirectory) {
-		// TODO: Add setting to skip this
-		if (await confirmDeletion(`Are you sure you wish to delete folder : ${currentlySelectedFile}?`)) {
-			await vscode.workspace.fs.delete(vscode.Uri.file(currentlySelectedFile), {recursive: true});
-			await vscode.commands.executeCommand("workbench.files.action.focusFilesExplorer");
-			await vscode.window.showInformationMessage(`Deleted folder :${currentlySelectedFile}.`);
+		let config = getConfig();
+		let confirmFolderDeletion = config.get<Boolean>("confirmFolderDeletion");
+		if (confirmFolderDeletion) {
+			if (!await confirmDeletion(`Are you sure you wish to delete folder : ${currentlySelectedFile}?`)) {
+				return;
+			}
 		}
+		await vscode.workspace.fs.delete(vscode.Uri.file(currentlySelectedFile), {recursive: true});
+		await vscode.commands.executeCommand("workbench.files.action.focusFilesExplorer");
+		await vscode.window.showInformationMessage(`Deleted folder :${currentlySelectedFile}.`);
 	} else {
-		// TODO: Add setting
 		await vscode.workspace.fs.delete(vscode.Uri.file(currentlySelectedFile));
 		await vscode.commands.executeCommand("workbench.files.action.focusFilesExplorer");
 		await vscode.window.showInformationMessage(`Deleted file :${currentlySelectedFile}.`);
