@@ -2,39 +2,40 @@
 
 This extension attempts to mimic the menu feature from the Vim [NERDTree](https://github.com/preservim/nerdtree) plugin.
 
-The extension includes one command `vscodeFileExplorerMenu.openFileExplorerMenu` which can be triggered through the normal command menu, but I recommend you bind it to a key scoped to file explorer menu for quick access.
-
 ![quick demo](images/vscode-file-explorer-menu-demo.gif)
+
+The extension includes one command `vscodeFileExplorerMenu.openFileExplorerMenu` which can be executed through the normal command menu, but I recommend you bind it to a key scoped to file explorer menu for quick access (e.g. I bind it to `m` and use `explorerViewletVisible && filesExplorerFocus && !inputFocus` for my when clause).
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+Just like the NERDTree Vim Plugin, this extension enables you to quickly:
 
-For example if there is an image subfolder under your extension project workspace:
+* Add a node.
+* Delete a node.
+* Move a node.
+* Copy a node.
+* Open a node in the system editor.
+* List out a node (i.e. `ls -ld`).
+* Copy the node's path to the clipboard.
+* Open the node in the system's file explorer.
 
-\!\[feature X\]\(images/feature-x.png\)
+Note - while the extension is made to work primarily through the context in the file explorer menu, if you call it from an editor it will assume the context is the file currently being edited. 
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
 This extension contributes the following settings:
 
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+* `fileExplorerMenu.confirmFolderDeletion`: An extra prompt for deleting a folder (default is true).
+* `fileExplorerMenu.displayListNodeInTerminal`: Displays the output of list node in a terminal instead of a notification (default is false).
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+* The way the extension gets the current file path is using the `copyFilePath` command. The extension saves the contents of the clipboard before running this command and then puts it back, but if you use a clipboard manager of some kind you may see a extra entries after running one of the extension's commands. I used this hack for two reasons: 1) I time boxed myself while trying to figure out how to do this and ran out of time and 2) I don't use a clipboard manager of any kind so I didn't mind this approach. If there's a proper way to do this without the clipboard hackery, please let me know.
+* List node doesn't work yet on windows, will add that soon.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
-
 ### 1.0.0
 
-Initial release of ...
+Initial release of the plugin.

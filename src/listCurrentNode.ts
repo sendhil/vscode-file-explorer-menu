@@ -13,7 +13,8 @@ export async function listCurrentNode(context: vscode.ExtensionContext) {
 		return;
 	}
 
-	const command = `ls -la ${currentFilePath}`;
+	// TODO: Get this to work on Windows.
+	const command = `ls -ld ${currentFilePath}`;
 
 	let config = getConfig();
 	if (config.get<Boolean>("displayListNodeInTerminal")) {
