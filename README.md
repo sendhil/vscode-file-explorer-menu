@@ -32,9 +32,12 @@ This extension contributes the following settings:
 ## Known Issues
 
 * The way the extension gets the current file path is using the `copyFilePath` command. The extension saves the contents of the clipboard before running this command and then puts it back, but if you use a clipboard manager of some kind you may see a extra entries after running one of the extension's commands. I used this hack for two reasons: 1) I time boxed myself while trying to figure out how to do this and ran out of time and 2) I don't use a clipboard manager of any kind so I didn't mind this approach. If there's a proper way to do this without the clipboard hackery, please let me know.
-* List node doesn't work yet on windows, will add that soon.
 
 ## Release Notes
+
+### 1.0.1
+
+* Fixed list node so it works on Windows.
 
 ### 1.0.0
 
