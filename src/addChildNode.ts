@@ -16,7 +16,18 @@ export async function addChildNode() {
 	if (rootFolder) {
 		startingFilePath = `${rootFolder.uri.fsPath}/`;
 	} else {
-		startingFilePath = `${path.dirname(await getCurrentlySelectedFilePath())}/`;
+		// If the currently selected file is a folder, then don't use `path.dirname` as it'll end up returning the parent folder.
+
+		let currentlySelectedFile = await getCurrentlySelectedFilePath();
+		const fileStats = await vscode.workspace.fs.stat(vscode.Uri.file(currentlySelectedFile));
+		if (fileStats.type === vscode.FileType.Directory) {
+			startingFilePath = currentlySelectedFile;
+			if (startingFilePath[startingFilePath.length - 1] !== '/') {
+				startingFilePath += "/";
+			}
+		} else {
+			startingFilePath = `${path.dirname(currentlySelectedFile)}/`;
+		}
 	}
 
 	const newFilePath = (await vscode.window.showInputBox({
