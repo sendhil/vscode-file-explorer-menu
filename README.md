@@ -35,6 +35,10 @@ This extension contributes the following settings:
 
 ## Release Notes
 
+### 1.0.2
+
+* Fixed bug where adding a node when a folder was selected resulted in the base path being the folder's parent.
+
 ### 1.0.1
 
 * Fixed list node so it works on Windows.
